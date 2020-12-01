@@ -51,7 +51,8 @@ $item=$data['item']['menu_id'];
 activity_log($user,'Hapus Menu',$item);
 //end log
         $this->load->model('Menu_model', 'menu');
-        $this->menu->hapusDataMenu($id);         
+        $this->menu->hapusDataMenu($id); 
+        $this->menu->hapusDataMenu_SubMenu($id);        
         $this->session->set_flashdata('message', '<div class="alert alert-success" role"alert">Menu deleted !</div>');
         redirect('menu');
     }

@@ -22,6 +22,12 @@ Class Menu_model extends CI_Model
                 $this->db->delete('user_menu');
 
         }
+        public function hapusDataMenu_SubMenu($menu_id)
+        {
+                $this->db->where('menu_id', $menu_id);
+                $this->db->delete('user_sub_menu');
+
+        }
 
         public function getMenuById($id){
                 return $this->db->get_where('user_menu', ['id' => $id])->row_array();

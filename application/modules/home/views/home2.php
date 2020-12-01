@@ -34,19 +34,15 @@ a:hover, a:active {
 </style>
 </head>
 <body>
-<h1 class="cover-heading">Sister v4</h1>
-	<p class="lead">Sistem Informasi Sekolah</p>
+<h1 class="cover-heading">Buku Kas v4</h1>
+	<p class="lead">Buku Kas Sekolah</p>
 <div class="row">
+<div class="col-md-4">
+</div>
 <div class="col-md-4">
 <a href="<?= base_url('login') ?>">Login Admin</a>
 </div>
-<br>
 <div class="col-md-4">
-<a href="<?= base_url('loginppdb') ?>">Login Voucher</a>
-</div>
-<br>
-<div class="col-md-4">
-<a href="<?= base_url('preregistrasi') ?>">Preregistrasi</a>
 </div>
 </div>
 </body></html>
