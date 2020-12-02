@@ -337,88 +337,6 @@ function getfieldtable2($field, $table, $primary, $idkey)
     $ci->db->where("$primary", $idkey);
     return $ci->db->get()->row()->nama;
 }
-
-function get_namakelas($kelas_id)
-{
-    $ci = get_instance();
-    $ci->db->select('nama_kelas as value');
-    $ci->db->from('m_kelas');
-    $ci->db->where('id', $kelas_id);
-    return $ci->db->get()->row()->value;
-}
-
-function get_umur($tanggal_lahir)
-{
-    $biday = new DateTime($tanggal_lahir);
-    $today = new DateTime();
-
-    $diff = $today->diff($biday);
-    $umur = $diff->y;
-    return $umur;
-}
-
-function generatekodeinc($table,$kodeawal,$kode) {
-    $ci = get_instance();
-    $ci->db->select("MAX(RIGHT($kode,3)) as kd_max from $table");
-    $hasil = $ci->db->get()->row()->kd_max;
-    if($hasil>0){
-    $awal=$hasil+1;
-    $kd = sprintf("%03s", $awal);
-    }else{
-    $kd="001";
-    }
-    $kd=$kodeawal.$kd;
-    return $kd;
-    }
-    function generatekodeinc4($table,$kodeawal,$kode) {
-        $ci = get_instance();
-        $ci->db->select("MAX(RIGHT($kode,4)) as kd_max from $table");
-        $hasil = $ci->db->get()->row()->kd_max;
-        if($hasil>0){
-        $awal=$hasil+1;
-        $kd = sprintf("%04s", $awal);
-        }else{
-        $kd="0001";
-        }
-        $kd=$kodeawal.$kd;
-        return $kd;
-        }
-    function get_jumlahinventaris($barang_id)
-{
-    $ci = get_instance();
-    $ci->db->select('sum(jumlah) as value');
-    $ci->db->from('sar_inventaris');
-    $ci->db->where('barang_id', $barang_id);
-    return $ci->db->get()->row()->value;
-}
-function get_jumlahmutasi($barang_id)
-{
-    $ci = get_instance();
-    $ci->db->select('sum(jumlah) as value');
-    $ci->db->from('sar_mutasi_barang');
-    $ci->db->where('barang_id', $barang_id);
-    return $ci->db->get()->row()->value;
-}
-function get_jumlahinventaris_rusak($barang_id)
-{
-    $ci = get_instance();
-    $ci->db->select('sum(jumlah) as value');
-    $ci->db->from('sar_inventaris');
-    $ci->db->where('barang_id', $barang_id);
-    $ci->db->where('jumlah<','0');
-    return $ci->db->get()->row()->value;
-}
-function get_kelas_siswa_aktif($siswa_id)
-  {
-    $ci = get_instance();
-    $ci->db->select('`m_kelas_siswa`.kelas_id as value');
-    $ci->db->from('m_kelas_siswa');
-    $ci->db->where('siswa_id',$siswa_id);
-    $ci->db->order_by('m_kelas_siswa.tahun', 'desc');
-    $ci->db->limit('1');
-    return $ci->db->get()->row()->value;
-  }
-
   function activity_log($user,$aksi,$item)
 {
     $ci = get_instance();
@@ -431,37 +349,6 @@ function get_kelas_siswa_aktif($siswa_id)
     $sql        = $ci->db->insert('tb_log',$data);
 }
 
-function ppdb_siswa_jalur($siswa_id,$tahun_ppdb)
-{
-    $ci = get_instance();
-    $ci->db->select('*');
-    $ci->db->from('ppdb_siswa_jalur');
-    $ci->db->where('siswa_id', $siswa_id);
-    $ci->db->where('tahun_ppdb', $tahun_ppdb);
-    $query = $ci->db->get();
-    return $query->row_array();
-}
-function getnoformulir($siswa_id)
-{
-    $ci = get_instance();
-    $ci->db->select('noformulir as value');
-    $ci->db->from('ppdb_siswa_jalur');
-    $ci->db->where('siswa_id', $siswa_id);
-    $ci->db->order_by('ppdb_siswa_jalur.noformulir', 'desc');
-    $ci->db->limit('1');
-    return $ci->db->get()->row()->value;
-}
-function getnoformuliraktif($siswa_id,$tahunppdb)
-{
-    $ci = get_instance();
-    $ci->db->select('noformulir as value');
-    $ci->db->from('ppdb_siswa_jalur');
-    $ci->db->where('siswa_id', $siswa_id);
-    $ci->db->where('tahunppdb', $tahunppdb);
-    $ci->db->order_by('ppdb_siswa_jalur.noformulir', 'desc');
-    $ci->db->limit('1');
-    return $ci->db->get()->row()->value;
-}
 function get_ipaddress(){
     if (!empty($_SERVER['HTTP_CLIENT_IP']))   
   {
@@ -480,31 +367,7 @@ else
   return $ip_address;
 }
 
-function check_access_sekolah($user_id, $sekolah_id)
-{
-    $ci = get_instance();
-    $ci->db->where('user_id', $user_id);
-    $ci->db->where('sekolah_id', $sekolah_id);
-    $result = $ci->db->get('user_access_sekolah');
 
-    if ($result->num_rows() > 0) {
-        return "checked='checked'";
-    }
-
-    /* atau dalam 1 query
-    $ci->db->get_where('user_acces_menu',[
-        'role_id'=>$role_id,
-        'menu_id'=>$menu_id
-    ]);
-    */
-}
-
-function check_access_user($user_id)
-{
-    $ci = get_instance();
-    return $ci->db->get_where('user_access_sekolah', ['user_id' => $id])->row_array();
-
-}
 
 
 
