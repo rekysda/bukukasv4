@@ -23,32 +23,32 @@
       <div class="box-body">
 
         <?= $this->session->flashdata('message') ?>
-        <?php $getjenis= $getkategori['jenis_id'];?>
+        <?php $getkategori= $getrekening['kategori_id'];?>
         <form action="" method="post"enctype="multipart/form-data">
-            <div class="form-group <?php echo form_error('jenis') ? 'has-error' : '' ?>">
-                <label for="name">Jenis</label>
-                <select name="jenis_id" id="jenis_id" class="form-control">
-<option value="">== Jenis ==</option>
-<?php foreach ($jenis as $dt) : ?>
-<option value="<?= $dt['id']; ?>" <?= $dt['id'] == $getjenis ? ' selected="selected"' : ''; ?>><?= $dt['nama']; ?></option>
+            <div class="form-group <?php echo form_error('kategori_id') ? 'has-error' : '' ?>">
+                <label for="name">Kategori</label>
+                <select name="kategori_id" id="kategori_id" class="form-control">
+<option value="">== Kategori ==</option>
+<?php foreach ($kategori as $dt) : ?>
+<option value="<?= $dt['id']; ?>" <?= $dt['id'] == $getkategori ? ' selected="selected"' : ''; ?>><?= $dt['kode']; ?> | <?= $dt['nama']; ?></option>
 									<?php endforeach; ?>
 								</select>
-                <?= form_error('jenis_id', '<span class="help-block">', '</small>'); ?>
+                <?= form_error('kategori_id', '<span class="help-block">', '</small>'); ?>
               </div>
              
               <div class="form-group <?php echo form_error('kode') ? 'has-error' : '' ?>">
                 <label for="name">Kode</label>
-                <input class="form-control" type="text" name="kode" value="<?= $getkategori['kode']; ?>" />
+                <input class="form-control" type="text" name="kode" value="<?= $getrekening['kode']; ?>" />
                 <?= form_error('kode', '<span class="help-block">', '</small>'); ?>
               </div>
               <div class="form-group <?php echo form_error('nama_ruangan') ? 'has-error' : '' ?>">
                 <label for="tahun">Nama</label>
-                <input class="form-control" type="text" name="nama" value="<?= $getkategori['nama']; ?>" />
+                <input class="form-control" type="text" name="nama" value="<?= $getrekening['nama']; ?>" />
                 <?= form_error('nama', '<span class="help-block">', '</small>'); ?>
               </div> 
               
               <button type="submit" class="btn btn-primary">Simpan</button>
-              <a href="<?= base_url('master/kategori'); ?> " class="btn btn-default">Cancel</a>
+              <a href="<?= base_url('master/rekening'); ?> " class="btn btn-default">Cancel</a>
             </form>
       </div>
       <!-- /.box-body -->

@@ -19,9 +19,9 @@ class Master extends CI_Controller
     $this->session->userdata('email')])->row_array();
     $this->load->model('master_model', 'master_model');
     $data['jenis'] =  $this->db->get('kas_jenis')->result_array();
-    $data['kategori'] =  $this->db->get('kas_kategori')->result_array();
+    $data['kategori'] = $this->master_model->get_kategori();
     
-    $this->form_validation->set_rules('jenis', 'jenis', 'required');
+    $this->form_validation->set_rules('jenis_id', 'jenis_id', 'required');
     $this->form_validation->set_rules('kode', 'kode', 'required|is_unique[kas_kategori.kode]');
     $this->form_validation->set_rules('nama', 'nama', 'required');
  
@@ -35,7 +35,7 @@ class Master extends CI_Controller
     }else{
 
         $data = [
-          'jenis' => $this->input->post('jenis'),
+          'jenis_id' => $this->input->post('jenis_id'),
           'kode' => $this->input->post('kode'),
           'nama' => $this->input->post('nama')
            ];
@@ -58,10 +58,9 @@ activity_log($user,'Tambah kategori',$item);
     
     $this->load->model('master_model', 'master_model');
     $data['jenis'] =  $this->db->get('kas_jenis')->result_array();
-    $data['kategori'] =  $this->db->get('kas_kategori')->result_array();
     $data['getkategori'] = $this->master_model->get_kategori_byId($id);
 
-    $this->form_validation->set_rules('jenis', 'jenis', 'required');
+    $this->form_validation->set_rules('jenis_id', 'jenis_id', 'required');
     $this->form_validation->set_rules('kode', 'kode', 'required');
     $this->form_validation->set_rules('nama', 'nama', 'required');
     if ($this->form_validation->run() == false) {
@@ -73,7 +72,7 @@ activity_log($user,'Tambah kategori',$item);
     $this->load->view('themes/backend/footerajax');
     }else{
       $data = [
-        'jenis' => $this->input->post('jenis'),
+        'jenis_id' => $this->input->post('jenis_id'),
         'kode' => $this->input->post('kode'),
         'nama' => $this->input->post('nama')
          ];
@@ -102,5 +101,94 @@ activity_log($user,'Hapus Kategori',$item);
     redirect('master/kategori');
   }
 
+//rekening
+public function rekening()
+{
+  $data['title'] = 'Rekening';
+  $data['user'] = $this->db->get_where('user', ['email' =>
+  $this->session->userdata('email')])->row_array();
+  $this->load->model('master_model', 'master_model');
+  $data['kategori'] =  $this->db->get('kas_kategori')->result_array();
+  $data['rekening'] = $this->master_model->get_rekening();
+  
+  $this->form_validation->set_rules('kategori_id', 'kategori_id', 'required');
+  $this->form_validation->set_rules('kode', 'kode', 'required|is_unique[kas_rekening.kode]');
+  $this->form_validation->set_rules('nama', 'nama', 'required');
+
+  if ($this->form_validation->run() == false) {
+  $this->load->view('themes/backend/header', $data);
+  $this->load->view('themes/backend/sidebar', $data);
+  $this->load->view('themes/backend/topbar', $data);
+  $this->load->view('rekening', $data);
+  $this->load->view('themes/backend/footer');
+  $this->load->view('themes/backend/footerajax');
+  }else{
+
+      $data = [
+        'kategori_id' => $this->input->post('kategori_id'),
+        'kode' => $this->input->post('kode'),
+        'nama' => $this->input->post('nama')
+         ];
+         $this->db->insert('kas_rekening', $data);
+//log act
+//$data['user'] = $this->db->get_where('user_role', ['id' => $id])->row_array();
+$user=$this->session->userdata('email');
+$item=$this->input->post('nama');
+activity_log($user,'Tambah rekening',$item);
+//end log   
+         $this->session->set_flashdata('message', '<div class="alert alert-success" role"alert">Data Saved !</div>');
+         redirect('master/rekening');
+  }
+}
+public function editrekening($id)
+{
+  $data['title'] = 'Rekening';
+  $data['user'] = $this->db->get_where('user', ['email' =>
+  $this->session->userdata('email')])->row_array();
+  
+  $this->load->model('master_model', 'master_model');
+  $data['kategori'] =  $this->db->get('kas_kategori')->result_array();
+  $data['getrekening'] = $this->master_model->get_rekening_byId($id);
+
+  $this->form_validation->set_rules('kategori_id', 'kategori_id', 'required');
+  $this->form_validation->set_rules('kode', 'kode', 'required');
+  $this->form_validation->set_rules('nama', 'nama', 'required');
+  if ($this->form_validation->run() == false) {
+  $this->load->view('themes/backend/header', $data);
+  $this->load->view('themes/backend/sidebar', $data);
+  $this->load->view('themes/backend/topbar', $data);
+  $this->load->view('editrekening', $data);
+  $this->load->view('themes/backend/footer');
+  $this->load->view('themes/backend/footerajax');
+  }else{
+    $data = [
+      'kategori_id' => $this->input->post('kategori_id'),
+      'kode' => $this->input->post('kode'),
+      'nama' => $this->input->post('nama')
+       ];
+        $this->db->where('id', $id);
+        $this->db->update('kas_rekening', $data);
+//log act
+//$data['user'] = $this->db->get_where('user_role', ['id' => $id])->row_array();
+$user=$this->session->userdata('email');
+$item=$this->input->post('nama');
+activity_log($user,'Edit Rekening',$item);
+//end log 
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role"alert">Data Saved !</div>');
+        redirect('master/rekening');
+  }
+}
+
+public function hapusrekening($id)
+{
+$user=$this->session->userdata('email');
+$item='';
+activity_log($user,'Hapus Kategori',$item);
+//end log    
+  $this->db->where('id', $id);
+  $this->db->delete('kas_rekening');
+  $this->session->set_flashdata('message', '<div class="alert alert-success" role"alert">Data deleted !</div>');
+  redirect('master/rekening');
+}
     //end
 }
